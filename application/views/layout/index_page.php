@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>D'Health | <?= $title ?></title>
+  <link rel="icon" type="image/x-icon" href="<?= base_url('assets/dist/img/dhealth.jpg') ?>">
   <?php 
     $pengguna = $this->db->get_where('pengguna', ['id_pengguna' => $this->session->id_pengguna])->row();
     $foto_profile = $pengguna->foto_profile ? 'assets/img/'. $pengguna->foto_profile : 'assets/dist/img/default-150x150.png'; 

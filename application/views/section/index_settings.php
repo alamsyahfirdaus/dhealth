@@ -43,6 +43,7 @@
                     $profile_pengguna = array(
                       'Nama<span style="color: white;">_</span>Lengkap' => $pengguna->nama_pengguna,
                       'Email' => $pengguna->email ? $pengguna->email : '-',
+                      'No. Handphone' => $pengguna->no_handphone ? $pengguna->no_handphone : '-',
                     );
 
                     foreach ($profile_pengguna as $key => $value) {
@@ -78,13 +79,14 @@
                       '<th style="width: 5%; text-align: center;">No</th>',
                       '<th>Nama<span style="color: white;">_</span>Pengguna</th>',
                       '<th>Email</th>',
+                      '<th>No.<span style="color: white;">_</span>Handphone</th>',
                       '<th style="text-align: center;">Foto</th>',
                       '<th style="width: 5%; text-align: center;">Aksi</th>',
                     );
 
                     $targets1 = array();
                     for ($i=0; $i < count($thead1); $i++) { 
-                      if ($i >= 1) {
+                      if ($i >= 4) {
                         $targets1[] = $i;
                       }
                       echo $thead1[$i];
@@ -128,6 +130,11 @@
             <label for="email">Email</label>
             <input type="text" name="email" id="email" class="form-control" value="" placeholder="Email" autocomplete="off">
             <span id="error-email" class="error invalid-feedback"></span>
+          </div>
+          <div class="form-group">
+            <label for="no_handphone">No. Handphone</label>
+            <input type="text" name="no_handphone" id="no_handphone" class="form-control" value="" placeholder="No. Handphone" autocomplete="off">
+            <span id="error-no_handphone" class="error invalid-feedback"></span>
           </div>
           <div class="form-group" id="input-password">
             <label for="password">Password</label>
@@ -232,7 +239,8 @@
     $('[name="id_pengguna"]').val('<?= $pengguna->id_pengguna ?>').change();
     $('[name="nama_pengguna"]').val('<?= $pengguna->nama_pengguna ?>').change();
     $('[name="email"]').val('<?= $pengguna->email ?>').change();
-    $('.modal-title').text('Ubah pengguna');
+    $('[name="no_handphone"]').val('<?= $pengguna->no_handphone ?>').change();
+    $('.modal-title').text('Ubah Profile');
     $('#modal-pengguna').modal('show');
   }
 
@@ -345,6 +353,7 @@
   function edit_pengguna(id) {
     var nama_pengguna   = $('[name="nama_pengguna_'+ id +'"]').val();
     var email = $('[name="email_'+ id +'"]').val();
+    var no_handphone = $('[name="no_handphone_'+ id +'"]').val();
 
     $('#input-password').show();
     $('#form-pengguna .form-control').val('').change();
@@ -353,6 +362,7 @@
     $('[name="id_pengguna"]').val(id).change();
     $('[name="nama_pengguna"]').val(nama_pengguna).change();
     $('[name="email"]').val(email).change();
+    $('[name="no_handphone"]').val(no_handphone).change();
     $('.modal-title').text('Ubah Pengguna');
     $('#modal-pengguna').modal('show');
   }

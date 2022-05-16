@@ -48,9 +48,12 @@ class Home extends CI_Controller {
 			$start++;
 			$row 	= array();
 
+
 			$foto_profile = $field->foto_profile ? 'assets/img/' . $field->foto_profile : 'assets/dist/img/default-150x150.png';
 
 			$foto = '<img class="img-fluid" src="'. base_url($foto_profile) .'" alt="" style="max-width: 100px; height: 100px;">';
+
+			$no_handphone = $field->no_handphone ? $field->no_handphone : '-';
 
             $aksi = '<div class="btn-group btn-group-sm">';
             $aksi .= '<button type="button" onclick="ubah_foto('. "'". base64_encode($field->id_pengguna) ."'" .')" class="btn btn-primary"><i class="fas fa-image"></i></button>';
@@ -59,10 +62,12 @@ class Home extends CI_Controller {
             $aksi .= '</div>';
             $aksi .= '<input type="hidden" name="nama_pengguna_'. $field->id_pengguna .'" value="'. $field->nama_pengguna .'">';
             $aksi .= '<input type="hidden" name="email_'. $field->id_pengguna .'" value="'. $field->email .'">';
+            $aksi .= '<input type="hidden" name="no_handphone_'. $field->id_pengguna .'" value="'. $field->no_handphone .'">';
 			
 			$row[]  = '<div style="text-align: center;">'. $no++ .'</div>';
 			$row[]  = '<div style="text-align: left;">'. $field->nama_pengguna .'</div>';
 			$row[]  = '<div style="text-align: left;">'. $field->email .'</div>';
+			$row[]  = '<div style="text-align: left;">'. $no_handphone .'</div>';
 			$row[]  = '<div style="text-align: center;">'. $foto .'</div>';
 			$row[]  = '<div style="text-align: center;">'. $aksi .'</div>';
 
@@ -220,19 +225,22 @@ class Home extends CI_Controller {
 		$query = $this->db->get_where('pengguna', ['id_pengguna' => $this->input->post('id_pengguna')])->row();
 
 		if (isset($query->id_pengguna)) {
-			$unique_email =  $query->email != $this->input->post('email') ? '|is_unique[pengguna.email]' : '';
-			$required_password =  '';
+			$unique_email 		=  $query->email != $this->input->post('email') ? '|is_unique[pengguna.email]' : '';
+			$unique_hp 			=  $query->no_handphone != $this->input->post('no_handphone') ? '|is_unique[pengguna.no_handphone]' : '';
+			$required_password 	=  '';
 		} else {
-			$unique_email = '|is_unique[pengguna.email]';
-			$required_password =  '|required';
+			$unique_email 		= '|is_unique[pengguna.email]';
+			$unique_hp 			= '';
+			$required_password 	= '|required';
 		}
 
 		$this->load->library('form_validation');
 
 		$list_fields = array(
 			'nama_pengguna' 	=> ['Nama pengguna' 	=> 'trim|required'],
-			'email' 		=> ['Email' 		=> 'trim|required|valid_email'. $unique_email],
-			'password' 		=> ['Password' 		=> 'trim|min_length[6]'. $required_password],
+			'email' 			=> ['Email' 			=> 'trim|required|valid_email'. $unique_email],
+			'no_handphone' 		=> ['No. Handphone' 	=> 'trim|numeric|min_length[11]'. $unique_hp],
+			'password' 			=> ['Password' 			=> 'trim|min_length[6]'. $required_password],
 		);
 
 		$this->form_validation->set_error_delimiters('', '');
@@ -245,7 +253,8 @@ class Home extends CI_Controller {
 		$this->form_validation->set_message('required', '{field} harus diisi.');
 		$this->form_validation->set_message('is_unique', '{field} sudah terdaftar.');
 		$this->form_validation->set_message('valid_email', '{field} tidak valid.');
-		$this->form_validation->set_message('min_length', '{field} minimal {param} karakter.');
+		$this->form_validation->set_message('numeric', '{field} hanya boleh berisi angka.');
+		$this->form_validation->set_message('min_length', '{field} minimal {param} angka atau karakter.');
 
 		if ($this->form_validation->run() == FALSE) {
 
@@ -263,7 +272,8 @@ class Home extends CI_Controller {
 
 			$data = array(
 				'nama_pengguna' 	=> ucwords(strtolower($this->input->post('nama_pengguna'))), 
-				'email' 		=> $this->input->post('email'),
+				'email' 			=> $this->input->post('email'),
+				'no_handphone' 		=> $this->input->post('no_handphone'),
 			);
 
 			if ($this->input->post('password')) {

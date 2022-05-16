@@ -497,7 +497,28 @@ class Resepobat extends CI_Controller {
 			show_404();
 		}
 
-		echo json_encode($query);
+		$title = count($this->resepobat->findRacikan($query->id_resep_obat)) > 0 ? 'Resep Obat - Racikan' : 'Resep Obat - Non Racikan';
+
+		$data = array(
+			'title' 	=> $title,
+			'row'		=> $query,
+			'racikan'	=> $this->resepobat->findRacikan($query->id_resep_obat),
+		);
+
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        $this->load->library('pdfgenerator');
+        
+        // filename dari pdf ketika didownload
+        $file_pdf = 'resepobat_'. time();
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "portrait";
+        
+		$html = $this->load->view('section/print_resepobat', $data, true);   
+        
+        // run dompdf
+        $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
 	}
 
 }

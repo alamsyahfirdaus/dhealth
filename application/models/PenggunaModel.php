@@ -8,8 +8,9 @@ class PenggunaModel extends CI_Model {
 
 	private function _setBuilder()
 	{
-		$columnOrder	= [$this->primaryKey];
-		$columnSearch	= $this->db->list_fields($this->table);
+		$listFields 	= $this->db->list_fields($this->table);
+		$columnOrder	= $listFields;
+		$columnSearch	= $listFields;
 		$orderBy		= [$this->primaryKey => 'desc'];
 
 		$this->db->where('id_pengguna !=', $this->session->id_pengguna);
