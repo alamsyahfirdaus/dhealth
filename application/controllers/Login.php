@@ -73,7 +73,7 @@ class Login extends CI_Controller {
 				$output = array(
 					'status' => false,
 					'errors' => array(
-						'username' => 'Username belum terdaftar.', 
+						'email' => 'Email belum terdaftar.', 
 					) 
 				);
 
